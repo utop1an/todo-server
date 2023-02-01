@@ -17,10 +17,10 @@ jobs:
       - name: SCP to server
         uses: easingthemes/ssh-deploy@main
         with: 
-          host: ${{ HOST }}
-          username: ${{ USERNAME }}
-          password: ${{ PASSWORD }}
-          key: ${{SSH_KEY}}
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          key: ${{ secrets.SSH_KEY}}
           port: 22
           source: 'docs/'
           target: ''
