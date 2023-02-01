@@ -15,12 +15,15 @@ jobs:
       - run: npm install
       - run: npm run build
       - name: SCP to server
-        uses: appleboy/scp-action@v0.0.1
-        with: 
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
-          key: ${{ secrets.SSH_KEY}}
-          port: 22
-          source: 'docs/'
-          target: ''
+        uses: easingthemes/ssh-deploy@v4.0.5
+          
+        with:
+          # Private key part of an SSH key pair
+          SSH_PRIVATE_KEY: ${{secrets.SSH_KEY}}
+          # Remote host
+          REMOTE_HOST: ${{ secrets.HOST }}
+          # Remote user
+          REMOTE_USER: ${{ secrets.USERNAME}}
+          # Remote port
+          REMOTE_PORT: 22
+
