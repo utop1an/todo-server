@@ -66,10 +66,15 @@ export class AuthService {
     found.loginCount+=1;
     this.userRepository.save(found);
 
-    return this.jwtService.sign({
+    const token = this.jwtService.sign({
       id,
       username,
     });
+    return {
+      "statuscode": 200,
+      "message": "OK",
+      "token": token
+    }
   }
 
   async adminRegister(data: AdminRegisterDto){
@@ -114,10 +119,15 @@ export class AuthService {
     if (!isMatch){
       throw new BadRequestException('Invalid username or password');
     }
-    return this.jwtService.sign({
+    const token = this.jwtService.sign({
       id,
-      roles
+      username,
     });
+    return {
+      "statuscode": 200,
+      "message": "OK",
+      "token": token
+    }
 
   
   }
