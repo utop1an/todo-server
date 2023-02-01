@@ -23,4 +23,9 @@ jobs:
           port: 22
           source: "dist/"
           target: "~/remote_user/"
+          scripts: |
+            cd ~/remote_user
+            git pull origin master
+            npm install
+            pm2 restart todo-server
 
