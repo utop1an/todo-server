@@ -22,9 +22,9 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: 22
           source: "dist/"
-          target: "~/remote_user/"
+          target: "~/remote_user/todo-server"
           scripts: |
-            cd ~/remote_user
+            cd ~/remote_user/todo-server
             git pull origin master
             npm install
             pm2 restart todo-server
