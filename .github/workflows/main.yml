@@ -15,7 +15,7 @@ jobs:
       - run: npm install
       - run: npm run build
       - name: ssh to server
-        uses: appleboy/ssh-action@master
+        uses: fifsky/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
