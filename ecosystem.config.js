@@ -7,7 +7,7 @@ module.exports = {
       STAGE: "dev"
     },
     env_prod: {
-      port: 80,
+      port: 8080,
       STAGE: "prod"
 
     }
