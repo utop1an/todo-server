@@ -6,11 +6,11 @@ import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { AdminRegisterDto } from './dto/admin.register.dto';
 import * as bcrypt from 'bcrypt';
-import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt'
 import { Role } from 'src/utils/enums/role.enum';
 
 const ADMIN_SECRET = "V5|zrtR{?d}sF(j%Q>^<"
+
 @Injectable()
 export class AuthService {
   
