@@ -23,7 +23,7 @@ jobs:
           port: 22
           command: |
             cd ~/remote_user/todo-server
-            git pull origin master
+            git pull origin main
             npm install
             pm2 restart todo-server
 
