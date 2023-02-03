@@ -1,10 +1,10 @@
-name: deploy
+name: test and deploy
 on: 
   push: 
     branches: [ main ] 
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -13,7 +13,12 @@ jobs:
       - name: Build & Deploy
         uses: actions/setup-node@v3.6.0
       - run: npm install
-      - run: npm run build
+      - run: npm test
+
+  deploy:
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
       - name: ssh to server
         uses: fifsky/ssh-action@master
         with:
@@ -25,5 +30,6 @@ jobs:
             cd ~/remote_user/todo-server
             git pull origin main
             npm install
+            npm run build
             pm2 restart todo-server
 
