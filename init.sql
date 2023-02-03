@@ -22,7 +22,6 @@ CREATE TABLE todos (
 );
 
 
-
 DROP TABLE IF EXISTS admins ;
 
 

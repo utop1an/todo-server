@@ -21,7 +21,7 @@ const ENV = process.env.STAGE;
     TodoModule,
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: ENV=="dev" ? '.env.dev' : '.env.prod'
+      envFilePath: ENV=='dev' ? '.env.dev' : '.env.prod'
       // why is `env.${ENV} not work`???
     }),
     TypeOrmModule.forRootAsync({
@@ -29,8 +29,6 @@ const ENV = process.env.STAGE;
       inject: [ConfigService],
       
       useFactory: (configService: ConfigService) => {
-        console.log();
-        
         return {
           type: 'postgres',
           host: configService.get('DB_HOST'),

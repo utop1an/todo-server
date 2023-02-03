@@ -7,6 +7,15 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
   app.setGlobalPrefix('api');
-  await app.listen(`${process.env.port}`);
+  app.enableCors({
+    allowedHeaders: 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept, Observe, Access-Control-Allow-Origin',
+    methods: "GET,POST,DELETE,PATCH",
+    credentials: true,
+  });
+  let port = '3000'
+  if (process.env.port){
+    port = process.env.port
+  }
+  await app.listen(port);
 }
 bootstrap();
