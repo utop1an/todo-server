@@ -130,6 +130,7 @@ export class AuthService {
     const token = this.jwtService.sign({
       id,
       username,
+      roles
     });
     return {
       "statuscode": 200,
