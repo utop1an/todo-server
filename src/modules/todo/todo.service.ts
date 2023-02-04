@@ -2,10 +2,11 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../user/entities/user.entity';
-import { UserService } from '../user/user.service';
 import { CreateTodoDto } from './dto/create-todo.dto';
+import { DeleteCompletedTodos } from './dto/deleteCompletedTodos.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { Todo } from './entities/todo.entity';
+
 
 @Injectable()
 export class TodoService {
@@ -36,7 +37,16 @@ export class TodoService {
 
 
   findAll() {
+    // not implemented
     return `This action returns all todo`;
+  }
+
+  findByUserId(userId: number){
+    return this.todoRepository.find({
+      where:{
+        userId,
+      }
+    });
   }
 
   findOne(id: number) {
@@ -55,20 +65,23 @@ export class TodoService {
     if (updateTodoDto.title){
       todo.title = updateTodoDto.title;
     }
-    if (updateTodoDto.completed){
+    if (updateTodoDto.completed!=null){
       todo.completed = updateTodoDto.completed;
-      const user = await this.userRepository.findOne({
-        where:{
-          id: todo.userId,
-        }
-      });
+      if (updateTodoDto.completed){
+        
+        const user = await this.userRepository.findOne({
+          where:{
+            id: todo.userId,
+          }
+        });
 
-      if (!user){
-        throw new BadRequestException("Invalid user")
+        if (!user){
+          throw new BadRequestException("Invalid user")
+        }
+    
+        user.completeTodoCount +=1
+        this.userRepository.save(user);
       }
-  
-      user.completeTodoCount +=1
-      this.userRepository.save(user);
     }
     return this.todoRepository.save(todo);
   }
@@ -95,5 +108,16 @@ export class TodoService {
   remove(id: number) {
     return this.todoRepository.delete(id);
     
+  }
+
+  removeCompleted(dcTodos: DeleteCompletedTodos) {
+    console.log(typeof dcTodos.todos)
+    for (var id of dcTodos.todos){
+      this.todoRepository.delete(id)
+    }
+    return {
+      "statuscode": 200,
+      "message": "OK"
+    };
   }
 }

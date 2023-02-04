@@ -99,7 +99,11 @@ export class AuthService {
       password: hash,
       roles: [Role.Admin, Role.User],
     });
-    return await this.userRepository.save(user);
+    await this.userRepository.save(user)
+    return {
+      "statuscode": 200,
+      "message": "OK"
+    };
   }
 
   async adminLogin(data: LoginDto){
@@ -118,6 +122,10 @@ export class AuthService {
 
     if (!isMatch){
       throw new BadRequestException('Invalid username or password');
+    }
+    const isAdmin = found.roles.includes(Role.Admin)
+    if (!isAdmin) {
+      throw new ForbiddenException("Invalid access")
     }
     const token = this.jwtService.sign({
       id,
