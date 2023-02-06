@@ -62,7 +62,7 @@ export class AuthService {
     if (!isMatch){
       throw new BadRequestException('Invalid username or password');
     }
-    // login count
+    //count login 
     found.loginCount+=1;
     this.userRepository.save(found);
 

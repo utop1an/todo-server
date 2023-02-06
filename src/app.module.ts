@@ -12,6 +12,7 @@ import { ValidationPipe } from './utils/pipes/validation.pipe';
 import { JwtAuthGuard } from './utils/guards/jwt-auth.guard';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RolesGuard } from './utils/guards/roles.guard';
+import { HttpModule } from '@nestjs/axios';
 
 const ENV = process.env.STAGE;
 
@@ -43,6 +44,7 @@ const ENV = process.env.STAGE;
 
     }),
     AuthModule,
+    HttpModule,
   ],
   controllers: [AppController],
   providers: [

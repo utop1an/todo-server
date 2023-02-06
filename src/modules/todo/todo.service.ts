@@ -1,9 +1,10 @@
+import { Translate } from '@google-cloud/translate/build/src/v2';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../user/entities/user.entity';
 import { CreateTodoDto } from './dto/create-todo.dto';
-import { DeleteCompletedTodos } from './dto/deleteCompletedTodos.dto';
+import { TodoIDsDTO } from './dto/deleteCompletedTodos.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { Todo } from './entities/todo.entity';
 
@@ -13,7 +14,11 @@ export class TodoService {
 
   constructor(
     @InjectRepository(Todo) private todoRepository: Repository<Todo>,
-    @InjectRepository(User) private userRepository: Repository<User>) {}
+    @InjectRepository(User) private userRepository: Repository<User>,
+
+    ) {}
+
+  
 
   async create(createTodoDto: CreateTodoDto) {
     const todo = this.todoRepository.create(createTodoDto);
@@ -25,6 +30,8 @@ export class TodoService {
         id: todo.userId,
       }
     });
+
+    // count create
     if (!user){
       throw new BadRequestException("Invalid user")
     }
@@ -69,12 +76,13 @@ export class TodoService {
       todo.completed = updateTodoDto.completed;
       if (updateTodoDto.completed){
         
+        // count complete
         const user = await this.userRepository.findOne({
           where:{
             id: todo.userId,
           }
         });
-
+        
         if (!user){
           throw new BadRequestException("Invalid user")
         }
@@ -86,14 +94,28 @@ export class TodoService {
     return this.todoRepository.save(todo);
   }
 
-  async countTranslate(id: number){
-    const todo = await this.findOne(id);
-    if (!todo){
-      throw new BadRequestException('Todo not found');
-    }
+  async translate(userId: number){
+    const todos = this.todoRepository.find({
+      where:{
+        userId,
+      }
+    });
+    const translating = (await todos).map(todo => todo.title)
+    
+    
+
+    const googleTranslate = new Translate({
+      projectId: "todo-app-376115",
+      key: "AIzaSyDL3FDCSFLMJXypdEKcr1JY2pEP3RCfmnw"
+    })
+    
+    const target = "zh"
+    let [translations] = await googleTranslate.translate(translating, target);
+    
+    // count translate
     const user = await this.userRepository.findOne({
       where:{
-        id: todo.userId,
+        id: userId,
       }
     });
 
@@ -103,6 +125,15 @@ export class TodoService {
 
     user.translateTodoCount +=1
     this.userRepository.save(user);
+    const translated = (await todos).map((todo, currentindex)=> {
+      return {
+        id : todo.id,
+        title: translations[currentindex],
+        completed: todo.completed,
+        userId: todo.userId
+      }
+    })
+    return translated
   }
 
   remove(id: number) {
@@ -110,9 +141,9 @@ export class TodoService {
     
   }
 
-  removeCompleted(dcTodos: DeleteCompletedTodos) {
-    console.log(typeof dcTodos.todos)
-    for (var id of dcTodos.todos){
+  removeCompleted(todoids: TodoIDsDTO) {
+    
+    for (var id of todoids.todos){
       this.todoRepository.delete(id)
     }
     return {

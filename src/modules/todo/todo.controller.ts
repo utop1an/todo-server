@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, Validation
 import { TodoService } from './todo.service';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
-import { DeleteCompletedTodos} from './dto/deleteCompletedTodos.dto'
+import { TodoIDsDTO} from './dto/deleteCompletedTodos.dto'
 
 
 @Controller('todo')
@@ -34,6 +34,11 @@ export class TodoController {
     return this.todoService.update(+id, updateTodoDto);
   }
 
+  @Post('/translate')
+  translate(@Body('userId') userId: string){
+    return this.todoService.translate(+userId)
+  }
+
   @Delete(':id')
   remove(@Param('id') id: string) { 
     return this.todoService.remove(+id);
@@ -41,8 +46,8 @@ export class TodoController {
 
   @Post('/deleteCompleted')
   @UsePipes(new ValidationPipe({ transform: true }))
-  deleteCompelted(@Body() dcTodos: DeleteCompletedTodos){
-    console.log(dcTodos)
-    return this.todoService.removeCompleted(dcTodos);
+  deleteCompelted(@Body() todoids: TodoIDsDTO){
+    console.log(todoids)
+    return this.todoService.removeCompleted(todoids);
   }
 }

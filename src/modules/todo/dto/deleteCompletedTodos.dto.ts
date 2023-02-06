@@ -1,7 +1,7 @@
 import { IsArray, IsNotEmpty, IsNumber } from 'class-validator';
 
 
-export class DeleteCompletedTodos {
+export class TodoIDsDTO {
     @IsNotEmpty()
     @IsNumber({}, {each: true})
     todos : number[];
