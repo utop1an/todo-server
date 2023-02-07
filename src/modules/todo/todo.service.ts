@@ -7,7 +7,7 @@ import { CreateTodoDto } from './dto/create-todo.dto';
 import { TodoIDsDTO } from './dto/deleteCompletedTodos.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { Todo } from './entities/todo.entity';
-
+import * as google_access from './google.keys'
 
 @Injectable()
 export class TodoService {
@@ -105,8 +105,8 @@ export class TodoService {
     
 
     const googleTranslate = new Translate({
-      projectId: "todo-app-376115",
-      key: "AIzaSyDL3FDCSFLMJXypdEKcr1JY2pEP3RCfmnw"
+      projectId: google_access.projectId,
+      key: google_access.key
     })
     
     const target = "zh"
