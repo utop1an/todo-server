@@ -27,6 +27,7 @@ jobs:
         uses: 'google-github-actions/ssh-compute@v0'
         with:
           instance_name: 'todo-server'
+          user: vfqq1066
           zone: 'australia-southeast1-b'
           ssh_private_key: '${{ secrets.GCP_SSH_PRIVATE_KEY }}'
           command: |
