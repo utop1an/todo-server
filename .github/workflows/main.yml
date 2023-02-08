@@ -30,7 +30,7 @@ jobs:
           zone: 'australia-southeast1-b'
           ssh_private_key: '${{ secrets.GCP_SSH_PRIVATE_KEY }}'
           command: |
-            cd ~/todo/todo-server
+            cd /home/vfqq1066/todo/todo-server
             git pull origin main
             npm install
             npm run build
