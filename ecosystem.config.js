@@ -9,10 +9,6 @@ module.exports = {
     env_prod: {
       port: 8080,
       STAGE: "prod"
-
     }
-
   }],
-
-  
 };
